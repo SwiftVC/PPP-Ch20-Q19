@@ -1,19 +1,17 @@
 /*
 *	Author: CS
-*	Date:	2022_03_12
+*	Date:	2022_03_13
 *
-*	This is a recreation of the STL list (working back from the user interface) like the STL where it manages it's own memory as opposed to the
-*	pointer handling of previous chapters.
-*	It's been left in non-generalized integer element form for readability.
-*	+ve the list works when reduced to nothing and grown again, the memory is properly deallocated.
+*	A simple list implementation with a range-checked bidirectional iterator, it's safe provided you don't erase the link
+*	it points to.
 * 
-*	Criticism:
-*	The iterator used for list is not declared in the namespace of the list interface but in the list_node and so the user sees an unintuitive naming convention
-*	for iterators.
-*	No structured testing procedure was made for this more complicated environment.
+*	A list implementation with a range-checked bidirectional iterator, due to the lack of random access,
+*	keeping a pointer to the list, along with its index, iterating back to meet the index each time would be an option
+*	to avoid the scenario where the iterator's pointed to object has been deleted, however would be inefficient for access.
+*	A static object, associating indexes and given pointers could also be used.
 * 
-*	Lesson:
-*	When testing the non-templated version, the methods should be in a standard, non-header file
+*	(Edit of Ch20 Q13)
+*	!Iterate from start
 */
 
 #include <iostream>
@@ -36,6 +34,31 @@ int main() {
 			std::cout << "Testing the list with a function of STL style:\n";
 			std::cout << "The highest is:\t" << *high(newlist.begin(), newlist.end()) << std::endl;
 			std::cout << "Iterators with the list object work as expected.\n";
+
+			try {
+				std::cout << "\nTesting --list<int>::begin():\n";
+				--newlist.begin();
+			}
+			catch (std::exception e)
+			{
+				std::cout << e.what() << std::endl;
+			}
+			try {
+				std::cout << "\nTesting ++list<int>::end():\n";
+				++newlist.end();
+			}
+			catch (std::exception e)
+			{
+				std::cout << e.what() << std::endl;
+			}
+			std::cout << "\nSetting the last value to 1000 using the dereference operator and rerunning^:\n";
+			auto last = high(newlist.begin(), newlist.end());
+			++last;
+			*last = 1000;
+			std::cout << "The list is as follows:\n";
+			newlist.print();
+			std::cout << "Testing the list with a function of STL style:\n";
+			std::cout << "The highest is:\t" << *high(newlist.begin(), newlist.end()) << std::endl;
 		}
 	}
 	catch (std::exception e)

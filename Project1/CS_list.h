@@ -34,8 +34,18 @@ class iterator {
 public:
 	list_node* curr; // current link
 	iterator(list_node* p) : curr{ p } { }
-	iterator& operator++() { curr = curr->_next(); return *this; } // forward, *this returns an object equivalent to this one.
-	iterator& operator--() { curr = curr->_prev(); return *this; } // backward
+	iterator& operator++() {
+		if (curr==nullptr)
+			throw std::exception("incremented iterator past the end of the list");
+		curr = curr->_next();
+		return *this;
+	} // forward, *this returns an object equivalent to this one.
+	iterator& operator--() {
+		if (curr->_prev() == nullptr)
+			throw std::exception("incremented iterator before the beginning of the list");
+		curr = curr->_prev();
+		return *this;
+	} // backward
 	int& operator*() { return curr->_val; } // get value (dereference)
 	bool operator==(const iterator& b) const { return curr == b.curr; }
 	bool operator!= (const iterator& b) const { return curr != b.curr; }
