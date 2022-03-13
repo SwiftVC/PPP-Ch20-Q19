@@ -11,7 +11,6 @@
 *	A static object, associating indexes and given pointers could also be used.
 * 
 *	(Edit of Ch20 Q13)
-*	!Iterate from start
 */
 
 #include <iostream>
